@@ -1,4 +1,6 @@
+using System.Linq;
 using Kookweb.SubtitleTranslator.Domain.Models;
+using Kookweb.SubtitleTranslator.Domain.Models.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kookweb.SubtitleTranslator.Domain.Persistence.Contexts {
@@ -11,6 +13,23 @@ namespace Kookweb.SubtitleTranslator.Domain.Persistence.Contexts {
         public AppDbContext (DbContextOptions<AppDbContext> options) : base (options) { }
 
         protected override void OnModelCreating (ModelBuilder modelBuilder) {
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes ()
+                    .Where (t => t.ClrType.IsSubclassOf (typeof (BaseEntity)))) {
+                modelBuilder.Entity (
+                    entityType.Name,
+                    x => {
+                        x.Property ("Created")
+                            .HasDefaultValueSql ("getdate()");
+
+                        x.Property ("Modified")
+                            .HasDefaultValueSql ("getdate()");
+
+                        x.Property ("IsDeleted")
+                            .HasDefaultValue (false);
+                    });
+            }
+
             modelBuilder.Entity<tblTVShow> ()
                 .HasMany (p => p.Translates)
                 .WithOne (b => b.TVShow)
@@ -50,6 +69,7 @@ namespace Kookweb.SubtitleTranslator.Domain.Persistence.Contexts {
                 .HasMany (p => p.Translates)
                 .WithOne (b => b.SubtitleFile)
                 .OnDelete (DeleteBehavior.Restrict);
+
         }
     }
 }
