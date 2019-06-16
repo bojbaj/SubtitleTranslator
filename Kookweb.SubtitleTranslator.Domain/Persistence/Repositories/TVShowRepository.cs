@@ -9,7 +9,7 @@ namespace Kookweb.SubtitleTranslator.Domain.Repositories {
 
         public TVShowRepository (AppDbContext context) : base (context) { }
 
-        public async Task<IEnumerable<TVShow>> ListAsync () {
+        public async Task<IEnumerable<tblTVShow>> ListAsync () {
             return await _context.TVShows.ToListAsync ();
         }
     }

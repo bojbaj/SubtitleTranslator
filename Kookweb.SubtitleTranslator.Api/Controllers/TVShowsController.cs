@@ -10,16 +10,16 @@ namespace Kookweb.SubtitleTranslator.Api.Controllers {
 
     [Route ("api/[controller]")]
     [ApiController]
-    public class ShowsController : ControllerBase {
+    public class TVShowsController : ControllerBase {
         private readonly ITVShowService _tvShowService;
-        public ShowsController (ITVShowService tvShowService) {
+        public TVShowsController (ITVShowService tvShowService) {
             _tvShowService = tvShowService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TVShow>>> Get () {
+        public async Task<ActionResult<IEnumerable<tblTVShow>>> Get () {
 
-            IEnumerable<TVShow> shows = await _tvShowService.ListAsync ();
+            IEnumerable<tblTVShow> shows = await _tvShowService.ListAsync ();
             return Ok (shows);
         }
     }

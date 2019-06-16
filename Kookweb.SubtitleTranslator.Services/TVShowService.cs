@@ -11,7 +11,7 @@ namespace Kookweb.SubtitleTranslator.Services {
         public TVShowService (ITVShowRepository tvShowRepository) {
             this._tvShowRepository = tvShowRepository;
         }
-        public Task<IEnumerable<TVShow>> ListAsync () {
+        public Task<IEnumerable<tblTVShow>> ListAsync () {
             return _tvShowRepository.ListAsync ();
         }
     }

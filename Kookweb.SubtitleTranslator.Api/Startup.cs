@@ -27,7 +27,7 @@ namespace Kookweb.SubtitleTranslator.Api {
             services.AddMvc ().SetCompatibilityVersion (CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<AppDbContext> (options => {
-                options.UseInMemoryDatabase ("subtitle-translator-api-in-memory");
+                options.UseSqlServer (Configuration.GetConnectionString ("AppConnection"));
             });
 
             services.AddScoped<ITVShowRepository, TVShowRepository> ();

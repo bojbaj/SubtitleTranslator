@@ -4,6 +4,6 @@ using Kookweb.SubtitleTranslator.Domain.Models;
 
 namespace Kookweb.SubtitleTranslator.Domain.Services {
     public interface ITVShowService {
-        Task<IEnumerable<TVShow>> ListAsync ();
+        Task<IEnumerable<tblTVShow>> ListAsync ();
     }
 }

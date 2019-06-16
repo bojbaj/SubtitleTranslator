@@ -3,9 +3,53 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kookweb.SubtitleTranslator.Domain.Persistence.Contexts {
     public class AppDbContext : DbContext {
-        public DbSet<TVShow> TVShows { get; set; }
-        public DbSet<Translate> Translates { get; set; }
+        public DbSet<tblTVShow> TVShows { get; set; }
+        public DbSet<tblTranslate> Translates { get; set; }
+        public DbSet<tblLanguage> Languages { get; set; }
+        public DbSet<tblSubtitleFile> SubtitleFile { get; set; }
 
         public AppDbContext (DbContextOptions<AppDbContext> options) : base (options) { }
+
+        protected override void OnModelCreating (ModelBuilder modelBuilder) {
+            modelBuilder.Entity<tblTVShow> ()
+                .HasMany (p => p.Translates)
+                .WithOne (b => b.TVShow)
+                .OnDelete (DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<tblTranslate> ()
+                .HasOne (p => p.SubtitleFile)
+                .WithMany (b => b.Translates)
+                .OnDelete (DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<tblTranslate> ()
+                .HasOne (p => p.TVShow)
+                .WithMany (b => b.Translates)
+                .OnDelete (DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<tblTranslate> ()
+                .HasOne (p => p.Language)
+                .WithMany (b => b.Translates)
+                .OnDelete (DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<tblLanguage> ()
+                .HasMany (p => p.Translates)
+                .WithOne (b => b.Language)
+                .OnDelete (DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<tblLanguage> ()
+                .HasMany (p => p.SubtitleFiles)
+                .WithOne (b => b.Language)
+                .OnDelete (DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<tblSubtitleFile> ()
+                .HasOne (p => p.Language)
+                .WithMany (b => b.SubtitleFiles)
+                .OnDelete (DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<tblSubtitleFile> ()
+                .HasMany (p => p.Translates)
+                .WithOne (b => b.SubtitleFile)
+                .OnDelete (DeleteBehavior.Restrict);
+        }
     }
 }
